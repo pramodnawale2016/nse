@@ -1,5 +1,6 @@
 
 source venv/bin/activate
+
 python3.9 trade.py 
 
 docker build -t my-nse-code . 
