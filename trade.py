@@ -10,19 +10,20 @@ from kite_trade import *
 # # Than you can use login window of 'kite.zerodha.com' website Just don't logout from that window
 # # # Process shared on YouTube 'TradeViaPython'
 
-enctoken = "YL6uUcoOs/RhQuv964luiQwPF1tFWAZsoYtiTz/YSB30YVyLsd/cbdQnhueqwl53RPUJrNLr0mk0dfPNritVlZBaIxYa34VcAcxursRhgUoNBuD/dTlqQQ=="
+enctoken = "kTrOQHHzFPS3bo3H7B/zbcUp8y1JC6iez+DHwsco0WDKI0pvhYzO3/NuquZtAmOha/XBtOE3O8tkvYYiavLe2H64RXvJTSixmv/FtVXrIp8GjExcRN9ITQ=="
 kite = KiteApp(enctoken=enctoken)
 
 import pandas as pd
     
 # Get Historical Data to find out BANKNIFTY Open 
 import datetime, time
-instrument_token = 9685250
+instrument_token = 10930434
 from_datetime = datetime.datetime.now() - datetime.timedelta(days=3)     # From last & days
 to_datetime = datetime.datetime.now()
 interval = "day"
 data = kite.historical_data(instrument_token, from_datetime, to_datetime, interval, continuous=False, oi=False)
-
+print(data)
+time.sleep(20)
 # Custom values - YOU can update values for day_open,  default is data[0]['open']
 day_open = data[0]['open']
 strike_diff = 00 
@@ -39,13 +40,13 @@ total = 0
 PNL = 0
 end_time = datetime.datetime(2022, 10, 20, 15, 20)
 # print(kite.ltp(["NFO:BANKNIFTY"+expiry+"40100CE"])["NFO:BANKNIFTY"+expiry+"40100CE"]['last_price'])
-print(kite.ltp(["MCX:CRUDEOIL23APRFUT"])["MCX:CRUDEOIL23APRFUT"]['last_price'])
+print(kite.ltp(["MCX:CRUDEOIL23AUGFUT"])["MCX:CRUDEOIL23AUGFUT"]['last_price'])
 
 crude_pnl = []
 crude_buy_at = 0
 crude_sell_at=0
 c_pnl = 0
-def SMA(instrument_token = 63634951, length=5):
+def SMA(instrument_token = 64885767, length=5):
     global crude_buy_at, crude_sell_at,c_pnl
     from_datetime = datetime.datetime.now() - datetime.timedelta(minutes=length)     # From last & days
     to_datetime = datetime.datetime.now()
@@ -53,7 +54,7 @@ def SMA(instrument_token = 63634951, length=5):
     data = kite.historical_data(instrument_token, from_datetime, to_datetime, interval, continuous=False, oi=False)
     df = pd.DataFrame(data)
     high = df['high'].mean()
-    close = kite.ltp(["MCX:CRUDEOIL23APRFUT"])["MCX:CRUDEOIL23APRFUT"]['last_price']
+    close = kite.ltp(["MCX:CRUDEOIL23AUGFUT"])["MCX:CRUDEOIL23AUGFUT"]['last_price']
     low = df['low'].mean()
     print(high,close,low)
     if close > high:
@@ -82,15 +83,15 @@ nifty_pnl = []
 nifty_buy_at = 0
 nifty_sell_at=0
 n_pnl = 0
-def Nifty_SMA(instrument_token = 9685506, length=5):
+def Nifty_SMA(instrument_token = 10930434, length=5):
     global nifty_buy_at, nifty_sell_at,n_pnl
-    from_datetime = datetime.datetime.now() - datetime.timedelta(minutes=length)     # From last & days
+    from_datetime = datetime.datetime.now() - datetime.timedelta(minutes=length)     
     to_datetime = datetime.datetime.now()
     interval = "minute"
     data = kite.historical_data(instrument_token, from_datetime, to_datetime, interval, continuous=False, oi=False)
     df = pd.DataFrame(data)
     high = df['high'].mean()
-    close = kite.ltp(["NFO:NIFTY29APRFUT"])["NFO:NIFTY29APRFUT"]['last_price']
+    close = kite.ltp(["NFO:NIFTY23JULFUT"])["NFO:NIFTY23JULFUT"]['last_price']
     low = df['low'].mean()
     print(round(high,2),round(close,2),round(low,2))
     if close > high:
@@ -150,8 +151,8 @@ def Nifty_SMA(instrument_token = 9685506, length=5):
 while True:
     print('\n**************CRUDE*************\n')
     SMA()
-    # print('\n**************NIFTY*************\n')
-    # Nifty_SMA()
+    print('\n**************NIFTY*************\n')
+    Nifty_SMA()
     print("\n\n"+str(datetime.datetime.now())+"  "+str(crude_pnl))
     time.sleep(10)
 
